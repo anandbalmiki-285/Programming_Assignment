@@ -1,0 +1,684 @@
+💡 **Question 1**
+
+Given two linked list of the same size, the task is to create a new linked list using those linked lists. The condition is that the greater node among both linked list will be added to the new linked list.
+
+**Examples:**
+Input: list1 = 5->2->3->8
+list2 = 1->7->4->5
+Output: New list = 5->7->4->8
+
+Input:list1 = 2->8->9->3
+list2 = 5->3->6->4
+Output: New list = 5->8->9->4
+import java.util.*;
+
+class Solution
+{
+
+// Representation of node
+static class Node
+{
+	int data;
+	Node next;
+};
+
+static Node insert(Node root, int item)
+{
+	Node ptr, temp;
+	temp = new Node();
+	temp.data = item;
+	temp.next = null;
+
+	if (root == null)
+		root = temp;
+	else {
+		ptr = root;
+		while (ptr.next != null)
+			ptr = ptr.next;
+
+		ptr.next = temp;
+	}
+	return root;
+}
+
+// Function which returns new linked list
+static Node newList(Node root1, Node root2)
+{
+	Node ptr1 = root1, ptr2 = root2, ptr;
+	Node root = null, temp;
+
+	while (ptr1 != null) {
+		temp = new Node();
+		temp.next = null;
+
+		// Compare for greater node
+		if (ptr1.data < ptr2.data)
+			temp.data = ptr2.data;
+		else
+			temp.data = ptr1.data;
+
+		if (root == null)
+			root = temp;
+		else {
+			ptr = root;
+			while (ptr.next != null)
+				ptr = ptr.next;
+
+			ptr.next = temp;
+		}
+		ptr1 = ptr1.next;
+		ptr2 = ptr2.next;
+	}
+	return root;
+}
+
+static void display(Node root)
+{
+	while (root != null)
+	{
+		System.out.print( root.data + "->");
+		root = root.next;
+	}
+	System.out.println();
+}
+
+// Driver code
+public static void main(String args[])
+{
+	Node root1 = null, root2 = null, root = null;
+
+	// First linked list
+	root1=insert(root1, 5);
+	root1=insert(root1, 2);
+	root1=insert(root1, 3);
+	root1=insert(root1, 8);
+
+	System.out.print("First List: ");
+	display(root1);
+
+	// Second linked list
+	root2=insert(root2, 1);
+	root2=insert(root2, 7);
+	root2=insert(root2, 4);
+	root2=insert(root2, 5);
+
+	System.out.print( "Second List: ");
+	display(root2);
+
+	root = newList(root1, root2);
+	System.out.print("New List: ");
+	display(root);
+}
+}
+
+
+
+
+Question-2
+Write a function that takes a list sorted in non-decreasing order and deletes any duplicate nodes from the list. The list should only be traversed once.
+
+For example if the linked list is 11->11->11->21->43->43->60 then removeDuplicates() should convert the list to 11->21->43->60.
+Input:
+LinkedList: 
+11->11->11->21->43->43->60
+Output:
+11->21->43->60
+Input:
+LinkedList: 
+10->12->12->25->25->25->34
+Output:
+10->12->25->34
+
+import java.io.*;
+class LinkedList {
+	Node head; 
+
+	class Node {
+		int data;
+		Node next;
+		Node(int d)
+		{
+			data = d;
+			next = null;
+		}
+	}
+
+	void removeDuplicates()
+	{
+		Node curr = head;
+
+		
+		while (curr != null) {
+			Node temp = curr;
+			
+			while (temp != null && temp.data == curr.data) {
+				temp = temp.next;
+			}
+			
+			curr.next = temp;
+			curr = curr.next;
+		}
+	}
+
+	public void push(int new_data)
+	{
+	
+		Node new_node = new Node(new_data);
+
+		new_node.next = head
+
+		head = new_node;
+	}
+
+	void printList()
+	{
+		Node temp = head;
+		while (temp != null) {
+			System.out.print(temp.data + " ");
+			temp = temp.next;
+		}
+		System.out.println();
+	}
+
+	public static void main(String args[])
+	{
+		LinkedList llist = new LinkedList();
+		llist.push(20);
+		llist.push(13);
+		llist.push(13);
+		llist.push(11);
+		llist.push(11);
+		llist.push(11);
+
+		System.out.println(
+			"List before removal of duplicates");
+		llist.printList();
+
+		llist.removeDuplicates();
+
+		System.out.println(
+			"List after removal of elements");
+		llist.printList();
+	}
+}
+
+
+💡 **Question 3**
+
+Given a linked list of size **N**. The task is to reverse every **k** nodes (where k is an input to the function) in the linked list. If the number of nodes is not a multiple of *k* then left-out nodes, in the end, should be considered as a group and must be reversed (See Example 2 for clarification).
+
+**Example 1:**
+
+Input:
+LinkedList: 1->2->2->4->5->6->7->8
+K = 4
+Output:4 2 2 1 8 7 6 5
+Explanation:
+The first 4 elements 1,2,2,4 are reversed first
+and then the next 4 elements 5,6,7,8. Hence, the
+resultant linked list is 4->2->2->1->8->7->6->5.
+
+Input:
+LinkedList: 1->2->3->4->5
+K = 3
+Output:3 2 1 5 4
+Explanation:
+The first 3 elements are 1,2,3 are reversed
+first and then elements 4,5 are reversed.Hence,
+the resultant linked list is 3->2->1->5->4.
+
+class ReverseKGroupsLinkedList {
+  public ListNode reverseKGroup(ListNode head, int k) {
+      if (head == null || k == 1) {
+        return head;
+      }
+      ListNode dummy = new ListNode(0);
+      dummy.next = head;
+  
+      ListNode start = dummy;
+      ListNode end = head;
+      int count = 0;
+      while (end != null) {
+        count++;
+        // group
+        if (count % k == 0) {
+          // reverse linked list (start, end]
+          start = reverse(start, end.next);
+          end = start.next;
+        } else {
+          end = end.next;
+        }
+      }
+      return dummy.next;
+    }
+  
+    private ListNode reverse(ListNode start, ListNode end) {
+      ListNode curr = start.next;
+      ListNode prev = start;
+      ListNode first = curr;
+      while (curr != end){
+        ListNode temp = curr.next;
+        curr.next = prev;
+        prev = curr;
+        curr = temp;
+      }
+      start.next = prev;
+      first.next = curr;
+      return first;
+    }
+}
+
+
+💡 **Question 4**
+
+Given a linked list, write a function to reverse every alternate k nodes (where k is an input to the function) in an efficient way. Give the complexity of your algorithm.
+
+**Example:**
+
+public class LinkedList {
+ 
+    private ListNode head;
+ 
+    public void add(int data) {
+        if (head == null) {
+            head = new ListNode(data);
+            return;
+        }
+ 
+        ListNode n = new ListNode(data);
+        ListNode tmp = head;
+        while (tmp.next != null) {
+            tmp = tmp.next;
+        }
+        tmp.next = n;
+    }
+ 
+    public void printList() {
+        if (head == null) {
+            System.out.println("List is empty!");
+            return;
+        }
+        ListNode tmp = head;
+        while (tmp != null) {
+            System.out.print(tmp.data + " -> ");
+            tmp = tmp.next;
+        }
+        System.out.println("null");
+    }
+ 
+    public void reverseKAlternateNodes(int k) {
+        if (head == null || head.next == null || k < 2) {
+            return;
+        }
+        head = reverseKAlternateNodes(head, k);
+    }
+ 
+    // Reverse alternate k nodes
+    public ListNode reverseKAlternateNodes(ListNode head, int k) {
+        if (head == null || head.next == null || k < 2) {
+            return head;
+        }
+ 
+        // get k+1th node
+        ListNode temp = head;
+        int i = 0;
+        while (i < k && temp != null) {
+            temp = temp.next;
+            i++;
+        }
+ 
+        // reverse nodes upto k nodes traversed previously
+        head = reverseKNodes(head, k);
+        ListNode next = head;
+        while (next.next != null) {
+            next = next.next;
+        }
+        next.next = temp;
+ 
+        // Traverse next k nodes
+        i = 0;
+        ListNode prev = null;
+        while (i < k && temp != null) {
+            prev = temp;
+            temp = temp.next;
+            i++;
+        }
+ 
+        if (temp != null) {
+            prev.next = this.reverseKAlternateNodes(temp, k);
+        }
+ 
+        return head;
+    }
+ 
+    // Reverse k nodes starting from start node
+    private ListNode reverseKNodes(ListNode start, int k) {
+ 
+        if (start == null || k < 2) {
+            return null;
+        }
+ 
+        ListNode prev = null;
+        ListNode curr = start;
+        ListNode next = null;
+ 
+        int i = 1;
+        while (curr.next != null && i < k) {
+            next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+            i++;
+        }
+        next = curr.next;
+        curr.next = prev;
+        return curr;
+    }
+ 
+    public static void main(String[] args) {
+        LinkedList list = new LinkedList();
+        for (int i = 1; i <= 10; i++) {
+            list.add(i);
+        }
+        list.printList();
+        list.reverseKAlternateNodes(4);
+        list.printList();
+    }
+}
+ 
+class ListNode {
+ 
+    int data;
+    ListNode next;
+ 
+    public ListNode(int data) {
+        this.data = data;
+    }
+}
+
+
+💡 **Question 5**
+
+Given a linked list and a key to be deleted. Delete last occurrence of key from linked. The list may have duplicates.
+
+**Examples**:
+Input:   1->2->3->5->2->10, key = 2
+Output:  1->2->3->5->10
+
+class DeleteOccurances
+{
+
+
+static class Node
+{
+    int data;
+    Node next;
+};
+
+// Function to delete the last occurrence
+static void deleteLast(Node head, int x)
+{
+    Node temp = head, ptr = null;
+    while (temp!=null)
+    {
+
+        // If found key, update
+        if (temp.data == x)
+            ptr = temp;    
+        temp = temp.next;
+    }
+
+    // If the last occurrence is the last node
+    if (ptr != null && ptr.next == null)
+    {
+        temp = head;
+        while (temp.next != ptr)
+            temp = temp.next;
+        temp.next = null;
+    }
+
+    // If it is not the last node
+    if (ptr != null && ptr.next != null)
+    {
+        ptr.data = ptr.next.data;
+        temp = ptr.next;
+        ptr.next = ptr.next.next;
+        System.gc();
+    }
+}
+static Node newNode(int x)
+{
+    Node node = new Node();
+    node.data = x;
+    node.next = null;
+    return node;
+}
+static void display(Node head)
+{
+    Node temp = head;
+    if (head == null)
+    {
+        System.out.print("null\n");
+        return;
+    }
+    while (temp != null)
+    {
+        System.out.printf("%d --> ", temp.data);
+        temp = temp.next;
+    }
+    System.out.print("null\n");
+}
+
+/* Driver code*/
+public static void main(String[] args)
+{
+    Node head = newNode(11);
+    head.next = newNode(2);
+    head.next.next = newNode(3);
+    head.next.next.next = newNode(4);
+    head.next.next.next.next = newNode(5);
+    head.next.next.next.next.next = newNode(4);
+    head.next.next.next.next.next.next = newNode(4);
+    System.out.print("Created Linked list: ");
+    display(head);
+    deleteLast(head, 4);
+    System.out.print("List after deletion of 4: ");
+    display(head);
+}
+}
+
+
+💡 **Question 6**
+
+Given two sorted linked lists consisting of **N** and **M** nodes respectively. The task is to merge both of the lists (in place) and return the head of the merged list.
+
+**Examples:**
+
+Input: a: 5->10->15, b: 2->3->20
+
+Output: 2->3->5->10->15->20
+
+Input: a: 1->1, b: 2->4
+
+Output: 1->1->2->4
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+
+        if(list1!=null && list2!=null){
+        if(list1.val<list2.val){
+            list1.next=mergeTwoLists(list1.next,list2);
+            return list1;
+            }
+            else{
+                list2.next=mergeTwoLists(list1,list2.next);
+                return list2;
+        }
+        }
+        if(list1==null)
+            return list2;
+        return list1;
+    }
+}
+
+
+
+💡 **Question 7**
+
+Given a **Doubly Linked List**, the task is to reverse the given Doubly Linked List.
+
+**Example:**
+Original Linked list 10 8 4 2
+Reversed Linked list 2 4 8 10
+
+class DoublyLinkedList {
+ 
+    static Node head;
+ 
+    static class Node {
+ 
+        int data;
+        Node next, prev;
+ 
+        Node(int d)
+        {
+            data = d;
+            next = prev = null;
+        }
+    }
+ 
+    /* Function to reverse a Doubly Linked List */
+    void reverse_list()
+    {
+        Node temp = null;
+        Node current = head;
+ 
+        /* swap next and prev for all nodes of
+         doubly linked list */
+        while (current != null) {
+            temp = current.prev;
+            current.prev = current.next;
+            current.next = temp;
+            current = current.prev;
+        }
+ 
+        /* Before changing head, check for the cases like
+         empty list and list with only one node */
+        if (temp != null) {
+            head = temp.prev;
+        }
+    }
+    /* Function to insert a node at the beginning of the
+     * Doubly Linked List */
+    void add_at_begin(int new_data)
+    {
+        Node new_node = new Node(new_data);
+ 
+        new_node.prev = null;
+ 
+        new_node.next = head;
+ 
+        if (head != null) {
+            head.prev = new_node;
+        }
+        head = new_node;
+    }
+    void print_list(Node node)
+    {
+        while (node != null) {
+            System.out.print(node.data + " ");
+            node = node.next;
+        }
+    }
+ 
+    public static void main(String[] args)
+    {
+        DoublyLinkedList list = new DoublyLinkedList();
+ 
+        list.add_at_begin(17);
+        list.add_at_begin(13);
+        list.add_at_begin(1);
+        list.add_at_begin(7);
+        list.add_at_begin(2);
+ 
+        System.out.println("Original linked list ");
+        list.print_list(head);
+ 
+        list.reverse_list();
+        System.out.println("");
+        System.out.println("The reversed Linked List is ");
+        list.print_list(head);
+    }
+}
+
+
+💡 **Question 8**
+
+Given a doubly linked list and a position. The task is to delete a node from given position in a doubly linked list.
+
+**Example 1:**
+
+Input:
+LinkedList = 1 <--> 3 <--> 4
+x = 3
+Output:1 3
+Explanation:After deleting the node at
+position 3 (position starts from 1),
+the linked list will be now as 1->3.
+
+Input:
+LinkedList = 1 <--> 5 <--> 2 <--> 9
+x = 1
+Output:5 2 9
+
+void pop_at(int position) {     
+  
+  //1. check if the position is > 0
+  if(position < 1) {
+    System.out.print("\nposition should be >= 1.");
+  } else if (position == 1 && head != null) {
+    
+    //2. if the position is 1 and head is not null, make
+    //   head next as head and delete previous head  
+    Node nodeToDelete = head;
+    head = head.next;
+    nodeToDelete = null;
+    if (head != null)
+      head.prev = null;
+  } else {
+    
+    //3. Else, make a temp node and traverse to the 
+    //   node previous to the position
+    Node temp = new Node();
+    temp = head;
+    for(int i = 1; i < position-1; i++) {
+      if(temp != null) {
+        temp = temp.next;
+      }
+    }
+ 
+    //4. If the previous node and next of the previous  
+    //   is not null, adjust links 
+    if(temp != null && temp.next != null) {
+      Node nodeToDelete = temp.next;
+      temp.next = temp.next.next; 
+      if(temp.next.next != null)
+        temp.next.next.prev = temp.next;  
+      nodeToDelete = null; 
+    } else {
+      
+      //5. Else the given node will be empty.
+      System.out.print("\nThe node is already null.");
+    }       
+  }
+} 
