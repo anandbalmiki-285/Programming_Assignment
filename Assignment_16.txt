@@ -1,0 +1,597 @@
+💡 **Question 1**
+
+Given an array, for each element find the value of the nearest element to the right which is having a frequency greater than that of the current element. If there does not exist an answer for a position, then make the value ‘-1’.
+
+**Examples:**
+Input: a[] = [1, 1, 2, 3, 4, 2, 1]
+Output : [-1, -1, 1, 2, 2, 1, -1]
+
+Explanation:
+Given array a[] = [1, 1, 2, 3, 4, 2, 1]
+Frequency of each element is: 3, 3, 2, 1, 1, 2, 3
+
+Lets calls Next Greater Frequency element as NGF
+1. For element a[0] = 1 which has a frequency = 3,
+   As it has frequency of 3 and no other next element
+   has frequency more than 3 so  '-1'
+2. For element a[1] = 1 it will be -1 same logic
+   like a[0]
+3. For element a[2] = 2 which has frequency = 2,
+   NGF element is 1 at position = 6  with frequency
+   of 3 > 2
+4. For element a[3] = 3 which has frequency = 1,
+   NGF element is 2 at position = 5 with frequency
+   of 2 > 1
+5. For element a[4] = 4 which has frequency = 1,
+   NGF element is 2 at position = 5 with frequency
+   of 2 > 1
+6. For element a[5] = 2 which has frequency = 2,
+   NGF element is 1 at position = 6 with frequency
+   of 3 > 2
+7. For element a[6] = 1 there is no element to its
+   right, hence -1
+Input : a[] = [1, 1, 1, 2, 2, 2, 2, 11, 3, 3]
+Output : [2, 2, 2, -1, -1, -1, -1, 3, -1, -1]
+
+class Solution {
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+        Map<Integer, Integer> map = new HashMap<>(); // map for next greater element
+        Stack<Integer> stack = new Stack<>();
+        for (int num : nums2) {
+            while (!stack.empty() && stack.peek() < num) { // Pop elements from stack and update map with next greater element
+                map.put(stack.pop(), num);
+            }
+            stack.push(num); // Push current element onto stack
+        }
+        for (int i = 0; i < nums1.length; i++) { // Check if each element in nums1 has a next greater element in map
+            nums1[i] = map.containsKey(nums1[i]) ? map.get(nums1[i]) : -1; // Update element in nums1 with next greater element or -1
+        }
+        return nums1;
+    }
+}
+
+
+
+💡 **Question 2**
+
+Given a stack of integers, sort it in ascending order using another temporary stack.
+**Examples:**
+Input : [34, 3, 31, 98, 92, 23]
+Output : [3, 23, 31, 34, 92, 98]
+
+Input : [3, 5, 1, 4, 2, 8]
+Output : [1, 2, 3, 4, 5, 8]
+
+
+import java.util.*;
+
+class SortStack
+{
+	// This function return the sorted stack
+	public static Stack<Integer> sortstack(Stack<Integer>
+											
+	{
+		Stack<Integer> tmpStack = new Stack<Integer>();
+		while(!input.isEmpty())
+		{
+			// pop out the first element
+			int tmp = input.pop();
+		
+			// while temporary stack is not empty and
+			// top of stack is lesser than temp
+			while(!tmpStack.isEmpty() && tmpStack.peek()
+												
+			{
+				// pop from temporary stack and
+				// push it to the input stack
+			input.push(tmpStack.pop());
+			}
+			
+			// push temp in temporary of stack
+			tmpStack.push(tmp);
+		}
+		return tmpStack;
+	}
+	
+	// Driver Code
+	public static void main(String args[])
+	{
+		Stack<Integer> input = new Stack<Integer>();
+		input.add(34);
+		input.add(3);
+		input.add(31);
+		input.add(98);
+		input.add(92);
+		input.add(23);
+	
+		// This is the temporary stack
+		Stack<Integer> tmpStack=sortstack(input);
+		System.out.println("Sorted numbers are:");
+	
+		while (!tmpStack.empty())
+		{
+			System.out.print(tmpStack.pop()+" ");
+		}
+	}
+}
+
+
+
+💡 **Question 3**
+
+Given a stack with **push()**, **pop()**, and **empty()** operations, The task is to delete the **middle** element ****of it without using any additional data structure.
+
+Input  : Stack[] = [1, 2, 3, 4, 5]
+
+Output : Stack[] = [1, 2, 4, 5]
+
+Input  : Stack[] = [1, 2, 3, 4, 5, 6]
+
+Output : Stack[] = [1, 2, 4, 5, 6]
+
+import java.io.*;
+import java.util.*;
+
+public class  Solution {
+
+	// Deletes middle of stack of size
+	// n. Curr is current item number
+	static void deleteMid(Stack<Character> st,
+							int n, int curr)
+	{
+		
+		// If stack is empty or all items
+		// are traversed
+		if (st.empty() || curr == n)
+			return;
+		
+		// Remove current item
+		char x = st.pop();
+		
+		// Remove other items
+		deleteMid(st, n, curr+1);
+		
+		// Put all items back except middle
+		if (curr != n/2)
+			st.push(x);
+	}
+	
+	// Driver function to test above functions
+	public static void main(String args[])
+	{
+		Stack<Character> st =
+				new Stack<Character>();
+	
+		// push elements into the stack
+		st.push('1');
+		st.push('2');
+		st.push('3');
+		st.push('4');
+		st.push('5');
+		st.push('6');
+		st.push('7');
+	
+		deleteMid(st, st.size(), 0);
+	
+		// Printing stack after deletion
+		// of middle.
+		while (!st.empty())
+		{
+			char p=st.pop();
+			System.out.print(p + " ");
+		}
+	}
+}
+
+
+
+💡 **Question 4**
+
+Given a Queue consisting of first **n** natural numbers (in random order). The task is to check whether the given Queue elements can be arranged in increasing order in another Queue using a stack. The operation allowed are:
+
+1. Push and pop elements from the stack
+2. Pop (Or Dequeue) from the given Queue.
+3. Push (Or Enqueue) in the another Queue.
+
+**Examples :**
+
+Input : Queue[] = { 5, 1, 2, 3, 4 } 
+
+Output : Yes 
+
+Pop the first element of the given Queue 
+
+i.e 5. Push 5 into the stack. 
+
+Now, pop all the elements of the given Queue and push them to second Queue. 
+
+Now, pop element 5 in the stack and push it to the second Queue.   
+
+Input : Queue[] = { 5, 1, 2, 6, 3, 4 } 
+
+Output : No 
+
+Push 5 to stack. 
+
+Pop 1, 2 from given Queue and push it to another Queue. 
+
+Pop 6 from given Queue and push to stack. 
+
+Pop 3, 4 from given Queue and push to second Queue. 
+
+Now, from using any of above operation, we cannot push 5 into the second Queue because it is below the 6 in the stack.
+
+
+// Java Program to check if a queue
+// of first n natural number can
+// be sorted using a stack
+import java.io.*;
+import java.util.*;
+
+class Solution
+{
+	static Queue<Integer> q =
+					new LinkedList<Integer>();
+	
+	// Function to check if given
+	// queue element can be sorted
+	// into another queue using a stack.
+	static boolean checkSorted(int n)
+	{
+		Stack<Integer> st =
+					new Stack<Integer>();
+		int expected = 1;
+		int fnt;
+	
+		// while given Queue
+		// is not empty.
+		while (q.size() != 0)
+		{
+			fnt = q.peek();
+			q.poll();
+	
+			// if front element is
+			// the expected element
+			if (fnt == expected)
+				expected++;
+	
+			else
+			{
+				// if stack is empty,
+				// push the element
+				if (st.size() == 0)
+				{
+					st.push(fnt);
+				}
+	
+				// if top element is less than
+				// element which need to be
+				// pushed, then return false.
+				else if (st.size() != 0 &&
+						st.peek() < fnt)
+				{
+					return false;
+				}
+	
+				// else push into the stack.
+				else
+					st.push(fnt);
+			}
+	
+			// while expected element are
+			// coming from stack, pop them out.
+			while (st.size() != 0 &&
+				st.peek() == expected)
+			{
+				st.pop();
+				expected++;
+			}
+		}
+		
+		// if the final expected element
+		// value is equal to initial Queue
+		// size and the stack is empty.
+		if (expected - 1 == n &&
+				st.size() == 0)
+			return true;
+	
+		return false;
+	}
+	
+	// Driver Code
+	public static void main(String args[])
+	{
+		q.add(5);
+		q.add(1);
+		q.add(2);
+		q.add(3);
+		q.add(4);
+	
+		int n = q.size();
+
+		if (checkSorted(n))
+			System.out.print("Yes");
+		else
+			System.out.print("No");
+	}
+}
+
+
+
+💡 **Question 5**
+
+Given a number , write a program to reverse this number using stack.
+
+**Examples:**
+
+Input : 365
+Output : 563
+
+Input : 6899
+Output : 9986
+
+....
+
+import java.util.Stack; 
+  
+class ReverseDigits{ 
+    
+    static Stack<Integer> st= new Stack<>(); 
+  
+    static void push_digits(int number){ 
+        
+        while(number != 0){ 
+            st.push(number % 10); 
+            number = number / 10; 
+        } 
+    } 
+  
+    static int reverse_number(int number){ 
+        push_digits(number); 
+        int reverse = 0; 
+        int i = 1; 
+  
+        while (!st.isEmpty()){ 
+            reverse = reverse + (st.peek() * i); 
+            st.pop(); 
+            i = i * 10; 
+        } 
+  
+        return reverse; 
+    } 
+  
+    public static void main(String[] args){ 
+        int number = 12345;
+        
+        System.out.println(reverse_number(number));
+        
+    } 
+}
+
+
+
+
+💡 **Question 6**
+
+Given an integer k and a **[queue](https://www.geeksforgeeks.org/queue-data-structure/)** of integers, The task is to reverse the order of the first **k** elements of the queue, leaving the other elements in the same relative order.
+
+Only following standard operations are allowed on queue.
+
+- **enqueue(x) :** Add an item x to rear of queue
+- **dequeue() :** Remove an item from front of queue
+- **size() :** Returns number of elements in queue.
+- **front() :** Finds front item.
+
+
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
+
+public class Reverse_k_element_queue {
+
+	static Queue<Integer> queue;
+
+	// Function to reverse the first
+	// K elements of the Queue
+	static void reverseQueueFirstKElements(int k)
+	{
+		if (queue.isEmpty() == true || k > queue.size())
+			return;
+		if (k <= 0)
+			return;
+
+		Stack<Integer> stack = new Stack<Integer>();
+
+		// Push the first K elements into a Stack
+		for (int i = 0; i < k; i++) {
+			stack.push(queue.peek());
+			queue.remove();
+		}
+
+		// Enqueue the contents of stack
+		// at the back of the queue
+		while (!stack.empty()) {
+			queue.add(stack.peek());
+			stack.pop();
+		}
+
+		// Remove the remaining elements and enqueue
+		// them at the end of the Queue
+		for (int i = 0; i < queue.size() - k; i++) {
+			queue.add(queue.peek());
+			queue.remove();
+		}
+	}
+
+	// Utility Function to print the Queue
+	static void Print()
+	{
+		while (!queue.isEmpty()) {
+			System.out.print(queue.peek() + " ");
+			queue.remove();
+		}
+	}
+
+	// Driver code
+	public static void main(String args[])
+	{
+		queue = new LinkedList<Integer>();
+		queue.add(10);
+		queue.add(20);
+		queue.add(30);
+		queue.add(40);
+		queue.add(50);
+		queue.add(60);
+		queue.add(70);
+		queue.add(80);
+		queue.add(90);
+		queue.add(100);
+
+		int k = 5;
+		reverseQueueFirstKElements(k);
+		Print();
+	}
+}
+
+
+
+💡 **Question 7**
+
+Given a sequence of n strings, the task is to check if any two similar words come together and then destroy each other then print the number of words left in the sequence after this pairwise destruction.
+
+**Examples:**
+
+Input : ab aa aa bcd ab
+
+Output : 3
+
+*As aa, aa destroys each other so,*
+
+*ab bcd ab is the new sequence.*
+
+Input :  tom jerry jerry tom
+
+Output : 0
+
+*As first both jerry will destroy each other.*
+
+*Then sequence will be tom, tom they will also destroy*
+
+*each other. So, the final sequence doesn’t contain any*
+
+*word.*
+
+import java.util.*;
+public class Main
+{
+    public static void main(String[] args) {
+        String[] arr = {"prep", "bytes", "bytes", "prep", "dsa"};
+        System.out.println(remainingStringCount(arr));
+    }
+    Public static int remainingStringCount(String[] arr){
+        ArrayList<String> arrList = new ArrayList<>(Arrays.asList(arr));
+        boolean distinct = false;
+        do{
+            distinct = false;
+            for(int i = 0;i<arrList.size()-1;i++){
+                if(arrList.get(i)==arrList.get(i+1)){
+                    distinct = true;
+                    arrList.remove(i);
+                    
+                    // Here we are again removing string at index 'i'
+                    // because after removing the string in the above line,
+                    // the string at index 'i+1' will move to 'i'.
+                    arrList.remove(i);
+                }
+            }
+        }while(distinct);
+        return arrList.size();
+    }
+}
+
+
+
+💡 **Question 8**
+
+Given an array of integers, the task is to find the maximum absolute difference between the nearest left and the right smaller element of every element in the array.
+
+**Note:** If there is no smaller element on right side or left side of any element then we take zero as the smaller element. For example for the leftmost element, the nearest smaller element on the left side is considered as 0. Similarly, for rightmost elements, the smaller element on the right side is considered as 0.
+
+**Examples:**
+
+Input : arr[] = {2, 1, 8}
+Output : 1
+Left smaller  LS[] {0, 0, 1}
+Right smaller RS[] {1, 0, 0}
+Maximum Diff of abs(LS[i] - RS[i]) = 1
+
+Input  : arr[] = {2, 4, 8, 7, 7, 9, 3}
+Output : 4
+Left smaller   LS[] = {0, 2, 4, 4, 4, 7, 2}
+Right smaller  RS[] = {0, 3, 7, 3, 3, 3, 0}
+Maximum Diff of abs(LS[i] - RS[i]) = 7 - 3 = 4
+
+Input : arr[] = {5, 1, 9, 2, 5, 1, 7}
+Output : 1
+
+import java.util.*; 
+  
+class MaximumOfDifference{ 
+  
+    static void SmallerElement(int a[], int n, int SE[]){ 
+        
+        Stack<Integer> S = new Stack<>(); 
+  
+        for(int i = 0; i < n; i++){ 
+            
+            while(!S.empty() && S.peek() >= a[i]){ 
+                S.pop(); 
+            } 
+  
+            if(!S.empty()){ 
+                SE[i] = S.peek(); 
+            }  
+            
+            else{ 
+                SE[i] = 0; 
+            } 
+  
+            S.push(a[i]); 
+        } 
+    } 
+  
+    static int findMaxDiff(int a[], int n){ 
+        int[] left = new int[n]; 
+  
+        SmallerElement(a, n, left); 
+  
+        int[] right = new int[n]; 
+        
+        reverse(a); 
+        SmallerElement(a, n, right); 
+  
+        int result = -1; 
+        for(int i = 0; i < n; i++){ 
+            result = Math.max(result, Math.abs(left[i] - right[n - 1 - i])); 
+        } 
+ 
+        return result; 
+    } 
+  
+    static void reverse(int a[]){ 
+        int i, k, n = a.length, t; 
+        
+        for(i = 0; i < n / 2; i++){ 
+            t = a[i]; 
+            a[i] = a[n - i - 1]; 
+            a[n - i - 1] = t; 
+        } 
+    } 
+      
+    public static void main(String args[]){ 
+        int a[] = {2, 4, 8, 7, 7, 9, 3}; 
+        int n = a.length; 
+        
+        System.out.println(findMaxDiff(a, n)); 
+    } 
+}
